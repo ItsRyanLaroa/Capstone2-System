@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+main {
+  position: relative;
+  background-image: url(../images/img.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  padding: 120px;
+  overflow: hidden; /* Ensure the pseudo-element does not overflow */
+}
+
+main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(179, 27, 27, 0.3);
+  z-index: 1;
+  pointer-events: none;
+}
+
+main > * {
+  position: relative;
+  z-index: 2;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  background-color: #b31b1b;
+}
+.nav_logo {
+  padding: 10px 0;
+}
+.menu_items {
+  font-weight: 900;
+  display: flex;
+  list-style: none;
+  padding: 10px 0 10px 0;
+}
+
+.menu_items li {
+  position: relative;
+}
+
+.menu_items li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+}
+
+.menu_items li:hover a {
+  color: black;
+  text-decoration: underline;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-repeat: no-repeat;
+}
+.curveImg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  pointer-events: none;
+}
+.hero .row {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+  padding: 0 60px;
+  gap: 30px;
+  justify-content: space-between;
+}
+.hero .row h2,
+.hero .row p {
+  color: #fff;
+}
+.hero .row h2 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+.hero .column {
+  width: 50%;
+}
+.buttons {
+  display: flex;
+  margin-top: 25px;
+  gap: 10px;
+}
+
+.hero_img {
+  width: 450px;
+  z-index: 10;
+  position: relative;
+}
+#menu_toggle {
+  display: none;
+}
+
+@media (width < 860px) {
+  #menu_toggle {
+    display: block;
+  }
+  .nav {
+    padding: 0 20px;
+    background-color: #b31b1b;
+  }
+
+  .menu_items {
+    position: fixed;
+    text-align: center;
+    margin-top: 120px;
+    width: 100%;
+    background-color: darkgray;
+    right: -100%;
+    flex-direction: column;
+    transition: all 0.5s ease;
+  }
+  .showMenu .menu_items {
+    right: 0;
+  }
+  a {
+    color: black;
+  }
+  #menu_toggle {
+    width: 20px;
+    cursor: pointer;
+  }
+  .menu_items #menu_toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .hero {
+    padding-top: 130px;
+  }
+  .hero .row {
+    flex-direction: column;
+    padding: 0 20px;
+    justify-content: center;
+  }
+  .hero .row .column {
+    width: 100%;
+  }
+}
+
+@media (width < 600px) {
+  .hero {
+    padding-top: 80px;
+  }
+  .hero .row h2 {
+    font-size: 26px;
+  }
+  .buttons {
+    justify-content: center;
+  }
+  .btn {
+    padding: 10px 16px;
+  }
+}
+
+.regContainer {
+  display: flex;
+  width: 820px;
+  border: 1px solid black;
+  padding: 25px 30px;
+  margin: auto;
+  color: #fff;
+  background-color: #b31b1b;
+}
+
+form h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+form h5 {
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.regContainer form .user-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+form .user-details .input-field {
+  margin-bottom: 15px;
+  margin: 18px 0 10px 0;
+  width: calc(100% / 2 - 20px);
+}
+.user-details .input-field .details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.user-details .input-field input,
+.user-details .input-field select {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  padding-left: 15px;
+  border-radius: 5px;
+}
+
+.input-field label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.form .button {
+  height: 45px;
+  margin: 10px 0;
+}
+
+.form .button input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #fff;
+  background-color: black;
+}
+
+.form .button input:hover {
+  background-color: #ff4242;
+}
+
+@media (max-width: 960px) {
+  .regContainer {
+    max-width: 100%;
+  }
+
+  form .user-details .input-field {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .regContainer form .user-details {
+    max-height: 430px;
+    overflow-y: scroll;
+  }
+  .user-details::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .regContainer {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  form h5 {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 250px) {
+  form h5 {
+    font-size: 0.5rem;
+  }
+}
