@@ -67,6 +67,12 @@
               <p>Evaluation Criteria</p>
             </a>
           </li> 
+               <li class="nav-item dropdown">
+            <a href="./index.php?page=staff_questionnaire" class="nav-link nav-staff_questionnaire">
+              <i class="nav-icon fas fa-user-tie"></i>
+              <p>Staff Questionnaire</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="#" class="nav-link nav-edit_faculty">
               <i class="nav-icon fas fa-user-friends"></i>
