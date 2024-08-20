@@ -236,7 +236,7 @@ $conn->close();
         </header> -->
         <div class="regContainer">
             <form action="register.php" method="post" enctype="multipart/form-data" class="form">
-                <h2>Registration</h2>
+                <h2 style="color: red;">Registration</h2>
                 <div class="user-details">
                     <div class="input-field">
                         <span class="details">First Name</span>
