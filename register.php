@@ -184,6 +184,40 @@ $conn->close();
             padding: 6px 12px;
             margin: 0 10px;
         }
+        .regContainer {
+        display: flex;
+        width: 820px;
+        border: 1px solid black;
+        padding: 25px 30px;
+        margin: auto;
+        color: black;
+        /* background-color: #b31b1b; */
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 750px;
+        }
+        .form .button input {
+        height: 100%;
+        width: 100%;
+        outline: none;
+        font-weight: 500;
+        letter-spacing: 1px;
+        color: #fff;
+        background-color:  #b31b1b;;
+        }
+
+        .form .button input:hover {
+        background-color: #ff4242;
+        }
+        a {
+        color: blue;
+        text-decoration: none;
+        font-size: 13px;
+        }
+
     </style>
 </head>
 <body>
@@ -236,7 +270,7 @@ $conn->close();
                 <div class="button">
                     <input type="submit" value="Register" />
                 </div>
-                <p style="margin-left:250px; margin-top:10px;"><a href="index.php">Already have account? Login here...</a></p>
+                <p style="text-align:center;"><a href="index.php">Already have account? Login here...</a></p>
             </form>
         </div>
     </main>
