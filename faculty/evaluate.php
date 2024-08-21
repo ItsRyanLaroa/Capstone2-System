@@ -20,7 +20,7 @@ $restriction = $conn->query("SELECT r.id, s.id as sid, concat(s.firstname,' ',s.
                              FROM restriction_list r 
                              INNER JOIN staff_list s ON s.id = r.faculty_id 
                              WHERE academic_id = {$_SESSION['academic']['id']} 
-                             AND r.id NOT IN (SELECT staff_id FROM staff_evaluation_list 
+                             AND r.id NOT IN (SELECT staff_id FROM staff_evaluation
                                               WHERE academic_id = {$_SESSION['academic']['id']} 
                                               AND student_id = {$_SESSION['login_id']} )");
 

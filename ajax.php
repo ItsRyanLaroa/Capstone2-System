@@ -173,5 +173,33 @@ if($action == 'delete_staff'){
 		echo $delete;
 }
 
+if($action == 'save_staff_question'){
+    $save = $crud->save_staff_question();
+    if($save)
+        echo $save;
+}
+
+if($action == 'save_staff_restriction'){
+    $save = $crud->save_staff_restriction();
+    if($save)
+        echo $save;
+}
+// In ajax.php
+if($action == 'save_staff_evaluation'){
+    $save = $crud->save_staff_evaluation();
+    if($save)
+        echo $save;
+}
+
+
+// Delete staff question
+if($action == 'delete_staff_question'){
+	$question_id = intval($_POST['question_id']);
+	$delete = $crud->delete_staff_question($question_id);
+	if($delete) echo $delete;
+}
+
+
+
 ob_end_flush();
 ?>

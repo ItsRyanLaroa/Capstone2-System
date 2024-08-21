@@ -723,5 +723,41 @@ Class Action {
 			return 1;
 		}
 	}
+	public function save_staff_question() {
+        global $conn;
+        $staff_id = $_POST['staff_id'];
+        $class_id = $_POST['class_id'];
+        // Add your logic for saving staff questions
+        // For example:
+        $query = "INSERT INTO staff_questionnaire (staff_id, class_id) VALUES ('$staff_id', '$class_id')";
+        if ($conn->query($query)) {
+            echo 1; // Success
+        } else {
+            echo 2; // Failure
+        }
+    }
+// Inside admin_class.php
+public function save_staff_evaluation() {
+    global $conn; // Assuming $conn is your database connection
+    
+    $staff_id = intval($_POST['staff_id']);
+    $student_id = intval($_POST['student_id']);
+    $criteria_id = intval($_POST['criteria_id']);
+    $question_id = intval($_POST['question_id']);
+    $rating = intval($_POST['rating']);
+    $comments = $_POST['comments'];
+
+    // Example SQL query for saving evaluation
+    $sql = "INSERT INTO staff_evaluation (staff_id, student_id, criteria_id, question_id, rating, comments) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiisis", $staff_id, $student_id, $criteria_id, $question_id, $rating, $comments);
+
+    if ($stmt->execute()) {
+        return 1; // Success
+    } else {
+        return 0; // Failure
+    }
+}
+
 	
 }

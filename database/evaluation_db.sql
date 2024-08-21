@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2024 at 05:23 AM
+-- Generation Time: Aug 21, 2024 at 02:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,7 +111,10 @@ INSERT INTO `evaluation_answers` (`evaluation_id`, `question_id`, `rate`) VALUES
 (2, 3, 4),
 (3, 1, 5),
 (3, 6, 5),
-(3, 3, 4);
+(3, 3, 4),
+(4, 1, 5),
+(4, 6, 5),
+(4, 7, 5);
 
 -- --------------------------------------------------------
 
@@ -127,17 +130,19 @@ CREATE TABLE `evaluation_list` (
   `subject_id` int(30) NOT NULL,
   `faculty_id` int(30) NOT NULL,
   `restriction_id` int(30) NOT NULL,
-  `date_taken` datetime NOT NULL DEFAULT current_timestamp()
+  `date_taken` datetime NOT NULL DEFAULT current_timestamp(),
+  `staff_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `evaluation_list`
 --
 
-INSERT INTO `evaluation_list` (`evaluation_id`, `academic_id`, `class_id`, `student_id`, `subject_id`, `faculty_id`, `restriction_id`, `date_taken`) VALUES
-(1, 3, 1, 1, 1, 1, 8, '2020-12-15 16:26:51'),
-(2, 3, 2, 2, 2, 1, 9, '2020-12-15 16:33:37'),
-(3, 3, 1, 3, 1, 1, 8, '2020-12-15 20:18:49');
+INSERT INTO `evaluation_list` (`evaluation_id`, `academic_id`, `class_id`, `student_id`, `subject_id`, `faculty_id`, `restriction_id`, `date_taken`, `staff_id`) VALUES
+(1, 3, 1, 1, 1, 1, 8, '2020-12-15 16:26:51', 0),
+(2, 3, 2, 2, 2, 1, 9, '2020-12-15 16:33:37', 0),
+(3, 3, 1, 3, 1, 1, 8, '2020-12-15 20:18:49', 0),
+(4, 3, 1, 4, 2, 2, 11, '2024-08-20 20:41:29', 0);
 
 -- --------------------------------------------------------
 
@@ -162,7 +167,7 @@ CREATE TABLE `faculty_list` (
 
 INSERT INTO `faculty_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `avatar`, `date_created`) VALUES
 (1, '20140623', 'George', 'Wilson', 'gwilson@sample.com', 'd40242fb23c45206fadee4e2418f274f', '1608011100_avatar.jpg', '2020-12-15 13:45:18'),
-(2, '111942434', 'John', 'Ernest', 'ernest@gmail.com', '3b2a1a9e06ce4db6a1573572fff02617', '1723637940_PUREDC.png', '2024-08-14 20:19:27');
+(2, '111942434', 'John', 'Ernest', 'ernest@gmail.com', '200820e3227815ed1756a6b531e7e0d2', '1723637940_PUREDC.png', '2024-08-14 20:19:27');
 
 -- --------------------------------------------------------
 
@@ -175,18 +180,21 @@ CREATE TABLE `question_list` (
   `academic_id` int(30) NOT NULL,
   `question` text NOT NULL,
   `order_by` int(30) NOT NULL,
-  `criteria_id` int(30) NOT NULL
+  `criteria_id` int(30) NOT NULL,
+  `staff_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `question_list`
 --
 
-INSERT INTO `question_list` (`id`, `academic_id`, `question`, `order_by`, `criteria_id`) VALUES
-(1, 3, 'Sample Question', 0, 1),
-(3, 3, 'Test', 2, 2),
-(5, 0, 'Question 101', 0, 1),
-(6, 3, 'Sample 101', 4, 1);
+INSERT INTO `question_list` (`id`, `academic_id`, `question`, `order_by`, `criteria_id`, `staff_id`) VALUES
+(1, 3, 'Sample Question', 0, 1, 0),
+(5, 0, 'Question 101', 0, 1, 0),
+(6, 3, 'Sample 101', 1, 1, 0),
+(8, 3, '324234', 6, 2, 0),
+(10, 3, '213214', 7, 2, 0),
+(13, 3, '213213', 8, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -209,8 +217,21 @@ CREATE TABLE `restriction_list` (
 INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `subject_id`) VALUES
 (8, 3, 1, 1, 1),
 (9, 3, 1, 2, 2),
-(10, 3, 1, 3, 3),
-(11, 3, 2, 1, 2);
+(11, 3, 2, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_evaluation`
+--
+
+CREATE TABLE `staff_evaluation` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -235,7 +256,50 @@ CREATE TABLE `staff_list` (
 --
 
 INSERT INTO `staff_list` (`id`, `staff_id`, `firstname`, `lastname`, `avatar`, `email`, `password`, `created_at`, `updated_at`) VALUES
-(1, '1412413413', 'henry', 'Sy', 'staff-1723690893.jpg', 'henrySy@gmail.com', '$2y$10$MqO2Dp8iC5RTWCO6/MBaCOEYO/7GkHjXv/9C8IAfJyreEt21W8Rhm', '2024-08-15 03:01:33', '2024-08-15 03:01:33');
+(2, '3242352345', 'Luka', 'Doncic', 'staff-1724116806.png', 'lukaDoncic@gmail.com', '$2y$10$xlHphrco6.TznqtWIVef7O0HD9.RE1RJmmjbc10WPel0t06MkNH22', '2024-08-20 01:20:06', '2024-08-20 01:20:06'),
+(3, '214324345643', 'Kyrie ', 'Irving', 'staff-1724161513.jfif', 'kyrieIrve@gmail.com', '$2y$10$yF44adflYZsDPhJdBfD63.L0dkGjNydqLESvzbN32TrYNfQH.QMYC', '2024-08-20 13:45:13', '2024-08-20 13:45:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_question`
+--
+
+CREATE TABLE `staff_question` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `question` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_question_list`
+--
+
+CREATE TABLE `staff_question_list` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `criteria_id` int(11) NOT NULL,
+  `question` text NOT NULL,
+  `order_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_restriction_list`
+--
+
+CREATE TABLE `staff_restriction_list` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `question` text NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `position_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -263,8 +327,8 @@ INSERT INTO `student_list` (`id`, `school_id`, `firstname`, `lastname`, `email`,
 (1, '6231415', 'John', 'Smith', 'jsmith@sample.com', '1254737c076cf867dc53d60a0364f38e', 1, '1608012360_avatar.jpg', '2020-12-15 14:06:14'),
 (2, '101497', 'Claire', 'Blake', 'cblake@sample.com', '4744ddea876b11dcb1d169fadf494418', 2, '1608012720_47446233-clean-noir-et-gradient-sombre-image-de-fond-abstrait-.jpg', '2020-12-15 14:12:03'),
 (3, '123', 'Mike', 'Williams', 'mwilliams@sample.com', '3cc93e9a6741d8b40460457139cf8ced', 1, '1608034680_1605601740_download.jpg', '2020-12-15 20:18:22'),
-(4, '11194642654', 'Gian heinrich', 'Recaña', 'recana@gmail.com', '25d55ad283aa400af464c76d713c07ad', 1, '1723611120_1165039.jpg', '2024-08-14 12:52:53'),
-(5, '11194642654', 'John', 'Ernest', 'rkteloy@gmail.com', '25f9e794323b453885f5181f1b624d0b', 0, 'uploads/avatars/avatar_66bcaf234a986.png', '2024-08-14 21:20:35');
+(4, '11194642654', 'Gian heinrich', 'Recaña', 'recana@gmail.com', '25f9e794323b453885f5181f1b624d0b', 1, '1723611120_1165039.jpg', '2024-08-14 12:52:53'),
+(5, '11194642654', 'John', 'Ernest', 'rkteloy@gmail.com', '25f9e794323b453885f5181f1b624d0b', 2, 'uploads/avatars/avatar_66bcaf234a986.png', '2024-08-14 21:20:35');
 
 -- --------------------------------------------------------
 
@@ -380,12 +444,40 @@ ALTER TABLE `restriction_list`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `staff_evaluation`
+--
+ALTER TABLE `staff_evaluation`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_evaluation` (`staff_id`,`question_id`,`student_id`);
+
+--
 -- Indexes for table `staff_list`
 --
 ALTER TABLE `staff_list`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `staff_id` (`staff_id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `staff_question`
+--
+ALTER TABLE `staff_question`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`);
+
+--
+-- Indexes for table `staff_question_list`
+--
+ALTER TABLE `staff_question_list`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `criteria_id` (`criteria_id`);
+
+--
+-- Indexes for table `staff_restriction_list`
+--
+ALTER TABLE `staff_restriction_list`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `student_list`
@@ -437,7 +529,7 @@ ALTER TABLE `criteria_list`
 -- AUTO_INCREMENT for table `evaluation_list`
 --
 ALTER TABLE `evaluation_list`
-  MODIFY `evaluation_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `evaluation_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `faculty_list`
@@ -449,7 +541,7 @@ ALTER TABLE `faculty_list`
 -- AUTO_INCREMENT for table `question_list`
 --
 ALTER TABLE `question_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `restriction_list`
@@ -458,10 +550,34 @@ ALTER TABLE `restriction_list`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `staff_evaluation`
+--
+ALTER TABLE `staff_evaluation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `staff_list`
 --
 ALTER TABLE `staff_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `staff_question`
+--
+ALTER TABLE `staff_question`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff_question_list`
+--
+ALTER TABLE `staff_question_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff_restriction_list`
+--
+ALTER TABLE `staff_restriction_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `student_list`
@@ -486,6 +602,23 @@ ALTER TABLE `system_settings`
 --
 ALTER TABLE `users`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `staff_question`
+--
+ALTER TABLE `staff_question`
+  ADD CONSTRAINT `staff_question_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff_list` (`id`);
+
+--
+-- Constraints for table `staff_question_list`
+--
+ALTER TABLE `staff_question_list`
+  ADD CONSTRAINT `staff_question_list_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff_list` (`id`),
+  ADD CONSTRAINT `staff_question_list_ibfk_2` FOREIGN KEY (`criteria_id`) REFERENCES `criteria_list` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

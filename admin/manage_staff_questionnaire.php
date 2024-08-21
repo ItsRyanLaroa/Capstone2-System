@@ -49,6 +49,7 @@ function ordinal_suffix($num){
                     <form action="" id="manage-question">
                         <input type="hidden" name="staff_id" value="<?php echo isset($staff_id) ? $staff_id : '' ?>">
                         <input type="hidden" name="id" value="">
+                        <input type="hidden" name="student_id" value="<!-- Pass student ID here -->">
                         <div class="form-group">
                             <label for="">Criteria</label>
                             <select name="criteria_id" id="criteria_id" class="custom-select custom-select-sm select2">
@@ -132,7 +133,7 @@ function ordinal_suffix($num){
                                 <?php for($c = 0; $c < 5; $c++): ?>
                                 <td class="text-center">
                                     <div class="icheck-success d-inline">
-                                        <input type="radio" name="qid[<?php echo $row['id'] ?>][]" id="qradio<?php echo $row['id'].'_'.$c ?>">
+                                        <input type="radio" name="qid[<?php echo $row['id'] ?>][]" id="qradio<?php echo $row['id'].'_'.$c ?>" value="<?php echo $c + 1 ?>">
                                         <label for="qradio<?php echo $row['id'].'_'.$c ?>"></label>
                                   </div>
                                 </td>
@@ -151,92 +152,77 @@ function ordinal_suffix($num){
 
 <script>
     $(document).ready(function(){
-     $('.select2').select2({
-        placeholder: "Please select here",
-        width: "100%"
-      });
-    })
+        $('.select2').select2({
+            placeholder: "Please select here",
+            width: "100%"
+        });
+    });
 
     $('.edit_question').click(function(){
-        var id = $(this).attr('data-id')
+        var id = $(this).attr('data-id');
         var question = <?php echo json_encode($q_arr) ?>;
-        $('#manage-question').find("[name='id']").val(question[id].id)
-        $('#manage-question').find("[name='question']").val(question[id].question)
-        $('#manage-question').find("[name='criteria_id']").val(question[id].criteria_id).trigger('change')
-    })
+        $('#manage-question').find("[name='id']").val(question[id].id);
+        $('#manage-question').find("[name='question']").val(question[id].question);
+        $('#manage-question').find("[name='criteria_id']").val(question[id].criteria_id).trigger('change');
+    });
 
     $('.delete_question').click(function(){
-        _conf("Are you sure to delete this question?", "delete_question", [$(this).attr('data-id')])
-    })
+        _conf("Are you sure to delete this question?", "delete_question", [$(this).attr('data-id')]);
+    });
 
-    $('.tr-sortable').sortable()
+    $('.tr-sortable').sortable();
 
     $('#manage-question').on('reset', function(){
-        $(this).find('input[name="id"]').val('')
-        $('#manage-question').find("[name='criteria_id']").val('').trigger('change')
-    })
+        $(this).find('input[name="id"]').val('');
+        $('#manage-question').find("[name='criteria_id']").val('').trigger('change');
+        $('#manage-question').find("[name='question']").val('');
+    });
 
-    $('#manage-question').submit(function(e){
-        e.preventDefault()
-        start_load()
-        if ($('#question').val() == ''){
-            alert_toast("Please fill the question description first", 'error');
-            end_load();
-            return false;
-        }
-        $.ajax({
-            url: 'ajax.php?action=save_question',
-            data: new FormData($(this)[0]),
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            type: 'POST',
-            success: function(resp){
-                if(resp == 1){
-                    alert_toast('Data successfully saved', "success");
-                    setTimeout(function(){
-                        location.reload()
-                    }, 1500)
-                }
-            }
-        })
-    })
-
-    $('#order-question').submit(function(e){
-        e.preventDefault()
-        start_load()
-        $.ajax({
-            url: 'ajax.php?action=save_question_order',
-            data: new FormData($(this)[0]),
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            type: 'POST',
-            success: function(resp){
-                if(resp == 1){
-                    alert_toast('Order successfully saved', "success");
-                    end_load()
-                }
-            }
-        })
-    })
-
-    function delete_question($id){
-        start_load()
+    function delete_question(id){
+        start_load();
         $.ajax({
             url: 'ajax.php?action=delete_question',
             method: 'POST',
-            data: { id: $id },
+            data: {id: id},
             success: function(resp){
                 if(resp == 1){
-                    alert_toast("Data successfully deleted", 'success')
+                    alert_toast('Question successfully deleted.', 'success');
                     setTimeout(function(){
-                        location.reload()
-                    }, 1500)
+                        location.reload();
+                    }, 1500);
+                } else {
+                    alert_toast('An error occurred. Please try again.', 'error');
                 }
+                end_load();
             }
-        })
+        });
     }
+	$('#manage-question').submit(function(e){
+    e.preventDefault();
+    start_load();
+
+    var formData = new FormData($(this)[0]);
+    formData.append('student_id', $('#student_id').val()); // Add student ID to FormData
+
+    $.ajax({
+        url: 'ajax.php?action=save_staff_evaluation',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        success: function(resp){
+            if(resp == 1){
+                alert_toast('Data successfully saved.', 'success');
+                setTimeout(function(){
+                    location.reload();
+                }, 1500);
+            } else {
+                alert_toast('An error occurred. Please try again.', 'error');
+            }
+            end_load();
+        }
+    });
+});
+
 </script>
