@@ -14,7 +14,7 @@ Class Action {
 	    $this->db->close();
 	    ob_end_flush();
 	}
-
+// hello world
 	function login(){
 		extract($_POST);
 		$type = array("","users","faculty_list","student_list");
